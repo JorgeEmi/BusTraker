@@ -3,6 +3,7 @@
     "packagerOpts": {
       "port": 3080
     },
+    
     "name": "BusTracker",
     "slug": "BusTracker",
     "version": "1.0.0",
@@ -24,6 +25,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBQJ9MZwo_ftvu0K9tgl9iD28EkbhSa7Js"
+        }
       }
     },
     "web": {

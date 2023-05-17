@@ -11,7 +11,7 @@ import Geolocalizacion from './screens/Geolocalizacion'
 function MyStack() {
   return (
     <Stack.Navigator>
-
+      <Stack.Screen name="Geolocalizacion"component={Geolocalizacion}/>
       <Stack.Screen name="CreateUserScreen"component={CreateUserScreen}/>
       <Stack.Screen name="Inicio" component={Inicio}/>
     </Stack.Navigator>
