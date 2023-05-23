@@ -1,46 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
-import firebase from '../firebase'; // Ruta al archivo firebase.js que creaste
-import MapView, { Marker } from 'react-native-maps';
+import React from 'react';
+import { View, Button } from 'react-native';
+import * as Location from 'expo-location';
+import firebase from '../firebaseconfig'; // Ruta al archivo firebase.js que creaste
 
-const ClientScreen = () => {
-  const [driverLocation, setDriverLocation] = useState(null);
+const DriverScreen = () => {
+  const handleShareLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      console.log('Permission to access location was denied');
+      return;
+    }
 
-  useEffect(() => {
-    const driverRef = firebase.database().ref('drivers/driver1');
-    driverRef.on('value', (snapshot) => {
-        const location = snapshot.val();
-        setDriverLocation(location);
-        });
-        return () => {
-            // Detén la escucha de cambios cuando el componente se desmonte
-            driverRef.off();
-          };
-        }, []);
+    const location = await Location.getCurrentPositionAsync({});
+    const { latitude, longitude } = location.coords;
 
-        return (
-        <View style={{ flex: 1 }}>
-        {driverLocation && (
-        <MapView
-        style={{ flex: 1 }}
-        initialRegion={{
-        latitude: driverLocation.latitude,
-        longitude: driverLocation.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-        }}
-        >
-        <Marker
-        coordinate={{
-        latitude: driverLocation.latitude,
-        longitude: driverLocation.longitude,
-        }}
-        title="Ubicación del conductor"
-        />
-        </MapView>
-        )}
-        </View>
-        );
-        };
-        
-        export default ClientScreen;
+    // Guarda la ubicación en la base de datos de Firebase
+    firebase.database().ref('driverLocation').set({
+      latitude,
+      longitude,
+    });
+  };
+
+  return (
+    <View>
+      <Button title="Empezar a compartir ubicación" onPress={handleShareLocation} />
+    </View>
+  );
+};
+
+export default DriverScreen;
