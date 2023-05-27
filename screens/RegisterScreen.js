@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
-import firebase from './firebaseconfig';
+import firebase from '../firebaseconfig';
+
 
 const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');

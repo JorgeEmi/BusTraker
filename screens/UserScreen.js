@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button } from 'react-native';
-import firebase from './firebaseconfig';
+import firebase from '../firebaseconfig';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
-import { GOOGLE_MAPS_API_KEY } from './config.js';
+import { GOOGLE_MAPS_API_KEY } from '../config.js';
 
 
 const UserScreen = () => {
