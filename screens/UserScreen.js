@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import firebase from '../firebaseconfig';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { GOOGLE_MAPS_API_KEY } from '../config.js';
+import { useNavigation } from '@react-navigation/native';
 
 
 const UserScreen = () => {
+  const navigation = useNavigation();
   const [userLocation, setUserLocation] = useState(null);
   const [driverLocations, setDriverLocations] = useState([]);
 
@@ -58,10 +60,13 @@ const UserScreen = () => {
       console.log('Error fetching place details:', error);
     }
   };
+  const goToReportScreen = () => {
+    navigation.navigate('ReportScreen'); // Reemplaza 'ReportScreen' con el nombre real de tu pantalla de informe
+  };
 
   return (
-    <View>
-      <MapView style={{ width: '100%', height: '80%' }} region={userLocation}>
+    <View style={styles.container}>
+      <MapView style={styles.map} region={userLocation}>
         {userLocation && (
           <Marker coordinate={userLocation} pinColor="blue" title="Tu ubicación" />
         )}
@@ -74,9 +79,17 @@ const UserScreen = () => {
           />
         ))}
       </MapView>
-      <Button title="Refresh" onPress={() => {}} />
+      <Button title="Reportar" onPress={goToReportScreen} />
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  map: {
+    flex: 1,
+  },
+});
 
 export default UserScreen;

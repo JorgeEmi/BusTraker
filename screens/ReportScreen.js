@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import {Button, ScrollView, Text} from 'react-native'
-import firebase from '.../database/firebase'
+import firebase from '../firebaseconfig'
+import {initializeApp} from 'firebase/app';
 import {ListItem} from 'react-native-elements'
 
 const ReportScreen = () => {
     const[comments, setComments] = useState([])
+
+    const app = initializeApp(firebaseConfig);
 
     useEffect(() =>{
         firebase.db.collection('reportes').onSnapshot(querySnapshot =>{

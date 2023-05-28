@@ -4,13 +4,16 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import DriverScreen from './screens/DriverScreen';
 import UserScreen from './screens/UserScreen';
+import ReportScreen from './screens/ReportScreen';
 
 const AppNavigator = createStackNavigator(
   {
     Login: LoginScreen,
     Register: RegisterScreen,
-    Driver: DriverScreen,
-    User: UserScreen,
+    DriverScreen: DriverScreen,
+    UserScreen: UserScreen,
+    ReportScreen: ReportScreen,
+    
   },
   {
     initialRouteName: 'Login',
