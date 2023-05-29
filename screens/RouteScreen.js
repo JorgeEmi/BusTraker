@@ -1,54 +1,34 @@
-import React, {useEffect, useState} from 'react'
-import {Button, ScrollView, Text} from 'react-native'
-import firebase from '.../database/firebase'
-import {ListItem} from 'react-native-elements'
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import firebase from '../firebaseconfig';
 
 const RouteScreen = () => {
-    const[rutas, setRutas] = useState([])
+  const [rutas, setRutas] = useState([]);
 
-    useEffect(() =>{
-        firebase.db.collection('rutas').onSnapshot(querySnapshot =>{
-            const rutas =[];
-
-
-            querySnapshot.docs.forEach(doc =>{
-                const{numero, inicio, fin, precio} = doc.data()
-                comments.push({
-                  id: doc.id,
-                  numero,
-                  inicio,
-                  fin,
-                  precio  
-                })
-            });
-
-            setRutas(rutas)
+  useEffect(() => {
+    const obtenerRutas = () => {
+      firebase
+        .database()
+        .ref('rutas')
+        .on('value', (snapshot) => {
+          if (snapshot.exists()) {
+            const Rutas = snapshot.val();
+            const datosArray = Object.values(Rutas);
+            setRutas(datosArray);
+          }
         });
-    },[]);
+    };
 
-    return(
-        <ScrollView>
-            <Button 
-            title="Agregar Ruta" 
-            onPress={() => props.navigation.navigate('RouteForm')}
-            />
-            {
-                rutas.map(ruta =>{
-                    return(
-                        <ListItem
-                        key={ruta.id} bottomDivider
-                        >
-                           <ListItemChevron/>
-                           <ListItem.Content>
-                            <ListItem.Title>{ruta.numero}</ListItem.Title>
-                            <ListItem.Title>{ruta.inicio}</ListItem.Title>
-                            <ListItem.Title>{ruta.fin}</ListItem.Title>
-                            <ListItem.Subtitle>{ruta.numero}</ListItem.Subtitle>
-                            </ListItem.Content> 
-                        </ListItem>
-                    )
-                })
-            }
-        </ScrollView>
-    )
-}
+    obtenerRutas();
+  }, []);
+
+  return (
+    <View>
+      {rutas.map((item, index) => (
+        <Text key={index}>{item.report}</Text>
+      ))}
+    </View>
+  );
+};
+
+export default RouteScreen;

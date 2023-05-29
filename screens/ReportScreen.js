@@ -1,51 +1,39 @@
-import React, {useEffect, useState} from 'react'
-import {Button, ScrollView, Text} from 'react-native'
-import firebase from '../firebaseconfig'
-import {initializeApp} from 'firebase/app';
-import {ListItem} from 'react-native-elements'
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import firebase from '../firebaseconfig';
 
 const ReportScreen = () => {
-    const[comments, setComments] = useState([])
+  const [reports, setReport] = useState([]);
 
-    const app = initializeApp(firebaseConfig);
+  const changeScreen = () => {
+    navigation.navigate('ReportForm');
+  };
 
-    useEffect(() =>{
-        firebase.db.collection('reportes').onSnapshot(querySnapshot =>{
-            const comments =[];
-
-
-            querySnapshot.docs.forEach(doc =>{
-                const{comment} = doc.data()
-                comments.push({
-                  id: doc.id,
-                  comment  
-                })
-            });
-
-            setComments(comments)
+  useEffect(() => {
+    const obtenerReportes = () => {
+      firebase
+        .database()
+        .ref('reportes')
+        .on('value', (snapshot) => {
+          if (snapshot.exists()) {
+            const Reportes = snapshot.val();
+            const datosArray = Object.values(Reportes);
+            setReport(datosArray);
+          }
         });
-    },[]);
+    };
 
-    return(
-        <ScrollView>
-            <Button 
-            title="Nuevo Reporte" 
-            onPress={() => props.navigation.navigate('ReportForm')}
-            />
-            {
-                comments.map(comment =>{
-                    return(
-                        <ListItem
-                        key={comment.id} bottomDivider
-                        >
-                           <ListItemChevron/>
-                           <ListItem.Content>
-                            <ListItem.Title>{comment.comment}</ListItem.Title>
-                            </ListItem.Content> 
-                        </ListItem>
-                    )
-                })
-            }
-        </ScrollView>
-    )
-}
+    obtenerReportes();
+  }, []);
+
+  return (
+    <View>
+      {reports.map((item, index) => (
+        <Text key={index}>{item.report}</Text>
+      ))}
+       <Button title="Nuevo" onPress={changeScreen} />
+    </View>
+  );
+};
+
+export default ReportScreen;
