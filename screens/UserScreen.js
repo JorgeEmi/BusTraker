@@ -15,21 +15,15 @@ const UserScreen = () => {
 
   useEffect(() => {
     const getUserLocation = async () => {
-      const { status } = await Permissions.askAsync(Permissions.LOCATION);
-      if (status !== 'granted') {
-        console.log('Permission to access location was denied');
-        return;
-      }
+      let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          console.log('Permiso de geolocalización denegado');
+          return;
+        }
 
-      const location = await Location.getCurrentPositionAsync({});
-      const { latitude, longitude } = location.coords;
-
-      setUserLocation({
-        latitude,
-        longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
+        let userLocation = await Location.getCurrentPositionAsync({});
+        const { latitude, longitude } = userLocation.coords;
+        setUserLocation({ latitude, longitude });
 
       // Escucha los cambios en las ubicaciones de los conductores en la base de datos de Firebase
       firebase.database().ref('driverLocation').on('value', snapshot => {
@@ -60,26 +54,30 @@ const UserScreen = () => {
       console.log('Error fetching place details:', error);
     }
   };
-  const goToReportScreen = () => {
-    navigation.navigate('ReportScreen'); // Reemplaza 'ReportScreen' con el nombre real de tu pantalla de informe
-  };
-
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} region={userLocation}>
-        {userLocation && (
+      {userLocation && (
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: userLocation.latitude,
+            longitude: userLocation.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
           <Marker coordinate={userLocation} pinColor="blue" title="Tu ubicación" />
-        )}
-        {driverLocations.map((driverLocation, index) => (
-          <Marker
-            key={index}
-            coordinate={driverLocation}
-            pinColor="red"
-            onPress={() => handleMarkerPress(driverLocation)}
-          />
-        ))}
-      </MapView>
-      <Button title="Reportar" onPress={goToReportScreen} />
+          {driverLocations.map((driverLocation, index) => (
+            <Marker
+              key={index}
+              coordinate={driverLocation}
+              pinColor="red"
+              onPress={() => handleMarkerPress(driverLocation)}
+            />
+          ))}
+        </MapView>
+      )}
+      <Button title="Reportar" onPress={() => navigation.navigate('ReportForm')} />
     </View>
   );
 };

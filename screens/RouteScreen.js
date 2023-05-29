@@ -25,7 +25,9 @@ const RouteScreen = () => {
   return (
     <View>
       {rutas.map((item, index) => (
-        <Text key={index}>{item.report}</Text>
+        <Text key={index}>{item.numero}</Text>,
+        <Text key={index}>{item.inicio}</Text>,
+        <Text key={index}>{item.fin}</Text>
       ))}
     </View>
   );
