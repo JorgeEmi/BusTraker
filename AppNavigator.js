@@ -4,7 +4,7 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import DriverScreen from './screens/DriverScreen';
 import UserScreen from './screens/UserScreen';
-import ReportScreen from './screens/ReportScreen';
+import ReportForm from './screens/ReportForm';
 
 const AppNavigator = createStackNavigator(
   {
@@ -12,7 +12,7 @@ const AppNavigator = createStackNavigator(
     Register: RegisterScreen,
     DriverScreen: DriverScreen,
     UserScreen: UserScreen,
-    ReportScreen: ReportScreen,
+    ReportForm: ReportForm,
     
   },
   {
