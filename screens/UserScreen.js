@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import firebase from './firebaseConfig';
+import firebase from '../firebaseconfig';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { GOOGLE_MAPS_API_KEY } from '../config.js';
-import { useNavigation } from '@react-navigation/native';
 
 
-const UserScreen = () => {
-  const navigation = useNavigation();
+const UserScreen = ({ navigation }) => {
   const [userLocation, setUserLocation] = useState(null);
   const [driverLocations, setDriverLocations] = useState([]);
 
@@ -77,7 +75,8 @@ const UserScreen = () => {
           ))}
         </MapView>
       )}
-      <Button title="Reportar" onPress={() => navigation.navigate('ReportForm')} />
+      <Button title="Reportar" onPress={() => navigation.navigate('ReportScreen')} />
+      <Button title="Rutas" onPress={() => navigation.navigate('RouteScreen')} />
     </View>
   );
 };

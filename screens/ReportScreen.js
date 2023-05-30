@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import firebase from '../firebaseconfig';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import { firebaseConfig } from '../firebaseconfig';
+import { initializeApp } from 'firebase/app';
+
+const app = initializeApp(firebaseConfig);
 
 const ReportScreen = () => {
   const [reports, setReport] = useState([]);
 
-  const changeScreen = () => {
-    navigation.navigate('ReportForm');
-  };
-
   useEffect(() => {
     const obtenerReportes = () => {
-      firebase
+      app
         .database()
         .ref('reportes')
         .on('value', (snapshot) => {
@@ -31,9 +30,17 @@ const ReportScreen = () => {
       {reports.map((item, index) => (
         <Text key={index}>{item.report}</Text>
       ))}
-       <Button title="Nuevo" onPress={changeScreen} />
+        <Button style={styles.button} title="Nuevo" onPress={() => navigation.navigate('ReportForm')} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: 'skyblue',
+    paddingTop: 15,
+    paddingBottom: 15,
+  },
+});
 
 export default ReportScreen;
